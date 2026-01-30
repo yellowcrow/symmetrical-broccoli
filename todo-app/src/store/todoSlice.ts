@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 import type { Todo, TodoState, TodoFilter } from '../types/todo.types';
 
 const initialState: TodoState = {
@@ -12,11 +13,10 @@ const todoSlice = createSlice({
   reducers: {
     addTodo: (state, action: PayloadAction<string>) => {
       const newTodo: Todo = {
-        id: Date.now().toString(),
+        id: nanoid(),
         text: action.payload,
         completed: false,
         createdAt: Date.now(),
-        order: state.todos.length,
       };
       state.todos.push(newTodo);
     },
@@ -42,10 +42,6 @@ const todoSlice = createSlice({
     setFilter: (state, action: PayloadAction<TodoFilter>) => {
       state.filter = action.payload;
     },
-    
-    reorderTodos: (state, action: PayloadAction<Todo[]>) => {
-      state.todos = action.payload;
-    },
   },
 });
 
@@ -55,7 +51,6 @@ export const {
   deleteTodo,
   updateTodo,
   setFilter,
-  reorderTodos,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

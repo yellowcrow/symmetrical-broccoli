@@ -1,20 +1,12 @@
 import { useAppSelector } from '../store/hooks';
+import { selectFilteredTodos, selectTodoCounts } from '../store/selectors';
 import TodoItem from './TodoItem';
 
 const TodoList = () => {
+  const filteredTodos = useAppSelector(selectFilteredTodos);
+  const { active, completed, total } = useAppSelector(selectTodoCounts);
   const todos = useAppSelector((state) => state.todos.todos);
   const filter = useAppSelector((state) => state.todos.filter);
-
-  const filteredTodos = todos
-    .filter(todo => {
-      if (filter === 'active') return !todo.completed;
-      if (filter === 'completed') return todo.completed;
-      return true;
-    })
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-  const activeTodosCount = todos.filter(t => !t.completed).length;
-  const completedTodosCount = todos.filter(t => t.completed).length;
 
   if (todos.length === 0) {
     return (
@@ -30,10 +22,10 @@ const TodoList = () => {
     <div>
       <div className="flex justify-between items-center mb-4 text-sm text-gray-600">
         <span>
-          {activeTodosCount} active • {completedTodosCount} completed
+          {active} active • {completed} completed
         </span>
         <span className="font-medium">
-          Total: {todos.length} {todos.length === 1 ? 'task' : 'tasks'}
+          Total: {total} {total === 1 ? 'task' : 'tasks'}
         </span>
       </div>
 
